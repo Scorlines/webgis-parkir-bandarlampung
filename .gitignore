@@ -1,0 +1,112 @@
+# ============================================================
+# .gitignore - WebGIS Parkir Bandar Lampung
+# ============================================================
+
+# ─── PRIVASI & KEAMANAN ─────────────────────────────────────
+# File environment dengan kredensial database, password, dsb.
+backend/.env
+.env
+.env.local
+.env.*.local
+
+# ─── PYTHON ─────────────────────────────────────────────────
+# Virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+*.tar.gz
+
+# pytest / testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# ─── NODE.JS / FRONTEND ─────────────────────────────────────
+# Dependensi npm (sangat besar, install ulang dengan npm install)
+node_modules/
+
+# Build output Vite/React
+parkir-frontend/dist/
+dist/
+
+# Log npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── IDE & EDITOR ───────────────────────────────────────────
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (PyCharm, WebStorm, dll)
+.idea/
+*.iml
+
+# Vim / Emacs swp
+*.swp
+*.swo
+*~
+
+# ─── OS ─────────────────────────────────────────────────────
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ─── DATABASE ───────────────────────────────────────────────
+# Dump / backup database lokal
+*.sql.bak
+*.dump
+*.db
+*.sqlite3
+
+# ─── DATASET BESAR (OPSIONAL) ───────────────────────────────
+# Jika dataset terlalu besar, uncomment baris di bawah:
+# Dataset/KotaBandarLampung(ina-Geoportal)/
+
+# ─── MISC ───────────────────────────────────────────────────
+*.log
+*.tmp
+*.temp
+.cache/
+
+# ─── PATCH & UTILITY SCRIPTS ────────────────────────────────
+# Script sementara untuk fix dependency, tidak perlu di-commit
+patch_sqlalchemy.py
+
+# ─── BACKUP FILES ────────────────────────────────────────────
+*.bak
+*.backup
+
+# ─── FRONTEND ENV ────────────────────────────────────────────
+parkir-frontend/.env
+parkir-frontend/.env.local
+parkir-frontend/.env.*.local
