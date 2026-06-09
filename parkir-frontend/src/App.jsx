@@ -125,6 +125,26 @@ export default function App() {
     }
   }
 
+  // ── Inline edit dari ParkirCard di Sidebar ─────────────────
+  const handleInlineEdit = async (id, payload) => {
+    if (!isAdmin) { setShowLogin(true); throw new Error('Not admin') }
+    try {
+      await api.updateParkir(id, payload)
+      showToast('✅ Data parkir berhasil diperbarui')
+      loadData()
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        showToast('🔒 Sesi habis – silakan login ulang')
+        setIsAdmin(false)
+        api.logout()
+        setShowLogin(true)
+      } else {
+        showToast('❌ Gagal memperbarui data')
+      }
+      throw err
+    }
+  }
+
   const handleAdminClick = () => {
     if (isAdmin) {
       api.logout()
@@ -153,6 +173,7 @@ export default function App() {
         onSelect={handleSelect}
         isAdmin={isAdmin}
         onAdminClick={handleAdminClick}
+        onInlineEdit={handleInlineEdit}
         onAdd={() => {
           if (!isAdmin) { setShowLogin(true); return }
           setModal({ open: true, mode: 'create', data: null })
