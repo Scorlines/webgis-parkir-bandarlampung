@@ -10,7 +10,7 @@ export default function Sidebar({
   nearbyMode, setNearbyMode, nearbyRadius, setNearbyRadius,
   nearbyCenter, setNearbyCenter, setNearbyData,
   selectedId, onSelect, onAdd, onInlineEdit, onInlineCancel, loading,
-  isAdmin, onAdminClick
+  isAdmin, onAdminClick, theme, toggleTheme
 }) {
   const [editingId, setEditingId] = useState(null)
 
@@ -46,23 +46,38 @@ export default function Sidebar({
       {/* HEADER */}
       <div className="sidebar-header">
         <div className="logo-row">
-          <div className="logo-icon">🅿️</div>
+          <div className="logo-icon">P</div>
           <div>
             <div className="app-title">ParkMap Bandar Lampung</div>
             <div className="app-subtitle">WebGIS · Sistem Informasi Parkir Publik</div>
           </div>
-          <button
-            onClick={onAdminClick}
-            style={{
-              marginLeft: 'auto', fontSize: 11, padding: '4px 10px',
-              borderRadius: 6, border: '1px solid',
-              borderColor: isAdmin ? 'var(--warn)' : 'var(--accent)',
-              color: isAdmin ? 'var(--warn)' : 'var(--accent)',
-              background: 'transparent', cursor: 'pointer', fontWeight: 700
-            }}
-          >
-            {isAdmin ? '🔓 Logout' : '🔑 Admin'}
-          </button>
+          <div className="header-actions" style={{ display: 'flex', gap: 6, marginLeft: 'auto', alignItems: 'center' }}>
+            <button
+              onClick={toggleTheme}
+              style={{
+                fontSize: 11, padding: '4px 8px',
+                borderRadius: 6, border: '1px solid var(--border)',
+                color: 'var(--text)',
+                background: 'transparent', cursor: 'pointer', fontWeight: 600,
+                transition: 'all 0.15s'
+              }}
+            >
+              {theme === 'light' ? 'Mode Gelap' : 'Mode Terang'}
+            </button>
+            <button
+              onClick={onAdminClick}
+              style={{
+                fontSize: 11, padding: '4px 10px',
+                borderRadius: 6, border: '1px solid',
+                borderColor: isAdmin ? 'var(--warn)' : 'var(--accent)',
+                color: isAdmin ? 'var(--warn)' : 'var(--accent)',
+                background: 'transparent', cursor: 'pointer', fontWeight: 700,
+                transition: 'all 0.15s'
+              }}
+            >
+              {isAdmin ? 'Logout' : 'Admin'}
+            </button>
+          </div>
         </div>
         <div className="stats-row">
           <div className="stat-chip">
@@ -83,7 +98,6 @@ export default function Sidebar({
       {/* SEARCH */}
       <div className="section">
         <div className="search-box">
-          <span className="search-icon">🔍</span>
           <input
             type="text"
             className="search-input"
@@ -115,7 +129,7 @@ export default function Sidebar({
             onChange={e => setFilters(f => ({ ...f, tarif: e.target.value }))}
           >
             <option value="">Semua Tarif</option>
-            <option value="0">🆓 Gratis</option>
+            <option value="0">Gratis</option>
             <option value="2000">Rp 2.000</option>
             <option value="3000">Rp 3.000</option>
             <option value="5000">Rp 5.000</option>
@@ -125,7 +139,7 @@ export default function Sidebar({
 
       {/* PROXIMITY */}
       <div className="section">
-        <div className="filter-label">📍 Pencarian Terdekat</div>
+        <div className="filter-label">Pencarian Terdekat</div>
         <div className="prox-row">
           <input
             type="range" min="100" max="3000" step="100"
@@ -139,14 +153,14 @@ export default function Sidebar({
           className={`btn-prox ${nearbyMode ? 'active' : ''}`}
           onClick={toggleNearby}
         >
-          {nearbyMode ? '✕ Nonaktifkan Mode Terdekat' : '📡 Aktifkan Mode Terdekat'}
+          {nearbyMode ? 'Nonaktifkan Mode Terdekat' : 'Aktifkan Mode Terdekat'}
         </button>
         {nearbyMode && !nearbyCenter && (
           <div className="prox-hint">Klik titik di peta untuk mencari parkir terdekat</div>
         )}
         {nearbyMode && nearbyCenter && (
           <div className="prox-hint" style={{ color: 'var(--accent)' }}>
-            ✅ {features.length} parkir dalam {nearbyRadius}m
+            {features.length} parkir dalam {nearbyRadius}m
           </div>
         )}
       </div>
@@ -154,7 +168,7 @@ export default function Sidebar({
       {/* ACTIONS */}
       <div className="section" style={{ paddingBottom: 8 }}>
         <button className="btn-add" onClick={onAdd}>
-          {isAdmin ? <><span>＋</span> Tambah Parkir Baru</> : '🔒 Login Admin untuk Tambah'}
+          {isAdmin ? 'Tambah Parkir Baru' : 'Login Admin untuk Tambah'}
         </button>
       </div>
 
