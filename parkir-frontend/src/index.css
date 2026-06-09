@@ -128,6 +128,12 @@ html, body {
   border-color: var(--accent); 
   background: rgba(255, 255, 255, 0.08);
 }
+.form-select option,
+.edit-select option,
+select option {
+  background: var(--surface2);
+  color: var(--text);
+}
 .form-row { display: flex; gap: 10px; }
 .form-row .form-group { flex: 1; }
 .btn-primary {
