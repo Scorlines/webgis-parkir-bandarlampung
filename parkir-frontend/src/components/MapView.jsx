@@ -53,6 +53,9 @@ export default function MapView({ geojson, selectedId, nearbyMode, nearbyCenter,
   const geoLayerRef = useRef(null)
   const circleRef = useRef(null)
   const layersRef = useRef({})
+  // Simpan onMapClick di ref agar event listener selalu pakai versi terbaru
+  const onMapClickRef = useRef(onMapClick)
+  useEffect(() => { onMapClickRef.current = onMapClick }, [onMapClick])
 
   // Init map
   useEffect(() => {
@@ -70,8 +73,9 @@ export default function MapView({ geojson, selectedId, nearbyMode, nearbyCenter,
 
     L.control.zoom({ position: 'bottomleft' }).addTo(map)
 
+    // Gunakan ref agar selalu pakai versi callback terbaru (fix stale closure)
     map.on('click', (e) => {
-      if (onMapClick) onMapClick(e.latlng)
+      if (onMapClickRef.current) onMapClickRef.current(e.latlng)
     })
 
     leafletMapRef.current = map
