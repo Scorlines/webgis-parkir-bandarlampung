@@ -1,8 +1,8 @@
 .login-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,8 +10,8 @@
 }
 
 .login-card {
-  background: #161b22;
-  border: 1px solid #30363d;
+  background: var(--glass-bg-modal);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 40px 36px;
   width: 360px;
@@ -19,7 +19,9 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  box-shadow: 0 24px 64px var(--shadow);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 .login-logo {
@@ -62,18 +64,19 @@
 }
 
 .login-field input {
-  background: #0d1117;
-  border: 1px solid #30363d;
+  background: var(--glass-input);
+  border: 1px solid var(--glass-border);
   border-radius: 8px;
   padding: 10px 14px;
-  color: #e6edf3;
+  color: var(--text);
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
 }
 
 .login-field input:focus {
-  border-color: #0099ff;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .login-error {

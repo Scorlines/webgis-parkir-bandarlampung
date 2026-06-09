@@ -20,7 +20,16 @@ export default function App() {
   const [toast, setToast]           = useState({ show: false, msg: '' })
   const [isAdmin, setIsAdmin]       = useState(api.isAdmin())
   const [showLogin, setShowLogin]   = useState(false)
+  const [theme, setTheme]           = useState('dark')
   const mapRef = useRef(null)
+
+  useEffect(() => {
+    document.body.className = theme === 'light' ? 'light-theme' : ''
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme(t => t === 'light' ? 'dark' : 'light')
+  }
 
   const showToast = (msg) => {
     setToast({ show: true, msg })
@@ -34,7 +43,7 @@ export default function App() {
       setGeojson(gj)
       setStats(st)
     } catch {
-      showToast('⚠️ Backend offline – periksa koneksi')
+      showToast('Koneksi backend terputus / offline')
     } finally {
       setLoading(false)
     }
@@ -63,9 +72,9 @@ export default function App() {
     try {
       const result = await api.nearbyParkir(latlng.lat, latlng.lng, nearbyRadius, filters.jenis)
       setNearbyData(result)
-      showToast(`📍 ${result.total} parkir dalam radius ${nearbyRadius}m`)
+      showToast(`Ditemukan ${result.total} parkir dalam radius ${nearbyRadius}m`)
     } catch {
-      showToast('⚠️ Gagal mengambil data terdekat')
+      showToast('Gagal mengambil data terdekat')
     }
   }, [nearbyMode, nearbyRadius, filters.jenis])
 
@@ -94,21 +103,21 @@ export default function App() {
     try {
       if (modal.mode === 'create') {
         await api.createParkir(data)
-        showToast('✅ Parkir berhasil ditambahkan')
+        showToast('Lokasi parkir berhasil ditambahkan')
       } else {
         await api.updateParkir(modal.data.properties.id, data)
-        showToast('✅ Parkir berhasil diupdate')
+        showToast('Lokasi parkir berhasil diperbarui')
       }
       setModal({ open: false, mode: 'create', data: null })
       loadData()
     } catch (err) {
       if (err?.response?.status === 401) {
-        showToast('🔒 Sesi habis – silakan login ulang')
+        showToast('Sesi habis, silakan login kembali')
         setIsAdmin(false)
         api.logout()
         setShowLogin(true)
       } else {
-        showToast('❌ Gagal menyimpan data')
+        showToast('Gagal menyimpan data')
       }
     }
   }
@@ -117,11 +126,11 @@ export default function App() {
     if (!isAdmin) { setShowLogin(true); return }
     try {
       await api.deleteParkir(id)
-      showToast('🗑️ Parkir berhasil dihapus')
+      showToast('Lokasi parkir berhasil dihapus')
       setModal({ open: false, mode: 'create', data: null })
       loadData()
     } catch {
-      showToast('❌ Gagal menghapus data')
+      showToast('Gagal menghapus data')
     }
   }
 
@@ -130,16 +139,16 @@ export default function App() {
     if (!isAdmin) { setShowLogin(true); throw new Error('Not admin') }
     try {
       await api.updateParkir(id, payload)
-      showToast('✅ Data parkir berhasil diperbarui')
+      showToast('Data parkir berhasil diperbarui')
       loadData()
     } catch (err) {
       if (err?.response?.status === 401) {
-        showToast('🔒 Sesi habis – silakan login ulang')
+        showToast('Sesi habis, silakan login kembali')
         setIsAdmin(false)
         api.logout()
         setShowLogin(true)
       } else {
-        showToast('❌ Gagal memperbarui data')
+        showToast('Gagal memperbarui data')
       }
       throw err
     }
@@ -149,14 +158,14 @@ export default function App() {
     if (isAdmin) {
       api.logout()
       setIsAdmin(false)
-      showToast('👋 Berhasil logout')
+      showToast('Anda telah logout')
     } else {
       setShowLogin(true)
     }
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <Sidebar
         features={displayData.features}
         stats={stats}
@@ -183,6 +192,8 @@ export default function App() {
           setModal({ open: true, mode: 'edit', data: feat })
         }}
         loading={loading}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
       <MapView
         geojson={displayData}
@@ -193,6 +204,7 @@ export default function App() {
         onMapClick={handleMapClick}
         onFeatureClick={handleSelect}
         mapRef={mapRef}
+        theme={theme}
       />
       {modal.open && (
         <ParkirModal
@@ -208,7 +220,7 @@ export default function App() {
           onLogin={() => {
             setIsAdmin(true)
             setShowLogin(false)
-            showToast('✅ Login berhasil! Mode Admin aktif')
+            showToast('Login berhasil, mode admin aktif')
           }}
         />
       )}

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 
 const JENIS_OPTIONS = ['mobil', 'motor', 'keduanya']
-const JENIS_LABELS  = { mobil: '🚗 Mobil', motor: '🏍️ Motor', keduanya: '🚗🏍️ Keduanya' }
+const JENIS_LABELS  = { mobil: 'Mobil', motor: 'Motor', keduanya: 'Keduanya' }
 const JAM_OPTIONS   = ['06:00', '07:00', '08:00', '09:00', '00:00']
 const JAM_TUTUP_OPTIONS = ['20:00', '21:00', '22:00', '23:00', '00:00']
 const TARIF_OPTIONS = [0, 2000, 3000, 5000]
-const formatTarifLabel = (t) => t === 0 ? '🆓 Gratis' : `Rp ${Number(t).toLocaleString('id-ID')}/jam`
+const formatTarifLabel = (t) => t === 0 ? 'Gratis' : `Rp ${Number(t).toLocaleString('id-ID')}/jam`
 
 const defaultForm = {
   name: '', jenis_kendaraan: 'keduanya',
@@ -95,7 +95,7 @@ export default function ParkirModal({ mode, data, onSave, onDelete, onClose }) {
             </div>
             <div className="detail-row">
               <span className="detail-label">Kapasitas</span>
-              <span className="detail-value">🅿️ {p.kapasitas_tersedia} / {p.kapasitas_total} slot</span>
+              <span className="detail-value">{p.kapasitas_tersedia} / {p.kapasitas_total} slot</span>
             </div>
             <div className="detail-row">
               <span className="detail-label">Jenis</span>
@@ -105,12 +105,12 @@ export default function ParkirModal({ mode, data, onSave, onDelete, onClose }) {
             </div>
             <div className="detail-row">
               <span className="detail-label">Jam Buka</span>
-              <span className="detail-value">🕐 {p.jam_buka} – {p.jam_tutup}</span>
+              <span className="detail-value">{p.jam_buka} – {p.jam_tutup}</span>
             </div>
             <div className="detail-row">
               <span className="detail-label">Tarif</span>
               <span className="detail-value tarif-highlight">
-                {p.tarif_per_jam === 0 ? '🆓 Gratis' : `Rp ${Number(p.tarif_per_jam).toLocaleString('id-ID')}/jam`}
+                {p.tarif_per_jam === 0 ? 'Gratis' : `Rp ${Number(p.tarif_per_jam).toLocaleString('id-ID')}/jam`}
               </span>
             </div>
             {fasList.length > 0 && (
@@ -133,8 +133,8 @@ export default function ParkirModal({ mode, data, onSave, onDelete, onClose }) {
             {!delConfirm && (
               <>
                 <button className="btn-secondary" onClick={onClose}>Tutup</button>
-                <button className="btn-primary" onClick={() => setIsEditMode(true)}>✏️ Edit</button>
-                <button className="btn-danger" onClick={() => setDelConfirm(true)}>🗑️ Hapus</button>
+                <button className="btn-primary" onClick={() => setIsEditMode(true)}>Edit</button>
+                <button className="btn-danger" onClick={() => setDelConfirm(true)}>Hapus</button>
               </>
             )}
             {delConfirm && (
@@ -155,7 +155,7 @@ export default function ParkirModal({ mode, data, onSave, onDelete, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()}>
         <div className="modal-title">
-          {mode === 'create' ? '➕ Tambah Lokasi Parkir' : '✏️ Edit Lokasi Parkir'}
+          {mode === 'create' ? 'Tambah Lokasi Parkir' : 'Edit Lokasi Parkir'}
         </div>
 
         <div className="form-group">
@@ -236,7 +236,7 @@ export default function ParkirModal({ mode, data, onSave, onDelete, onClose }) {
 
         <div className="modal-actions">
           {mode === 'edit' && !delConfirm && (
-            <button className="btn-danger" onClick={() => setDelConfirm(true)}>🗑️ Hapus</button>
+            <button className="btn-danger" onClick={() => setDelConfirm(true)}>Hapus</button>
           )}
           {delConfirm && (
             <>

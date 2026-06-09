@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './ParkirCard.css'
 
-const formatTarif = (t) => Number(t) === 0 ? '🆓 Gratis' : 'Rp ' + Number(t).toLocaleString('id-ID')
+const formatTarif = (t) => Number(t) === 0 ? 'Gratis' : 'Rp ' + Number(t).toLocaleString('id-ID')
 // Mapping label UI -> value backend
 const JENIS_OPTIONS = [
   { label: 'Mobil & Motor', value: 'keduanya' },
@@ -72,7 +72,7 @@ export default function ParkirCard({ feature, selected, onClick, onEdit, onSave,
               <label className="edit-label">Tarif (Rp)</label>
               <select className="edit-select" value={form.tarif_per_jam} onChange={e => set('tarif_per_jam', e.target.value)}>
                 {TARIF_OPTIONS.map(t => (
-                  <option key={t} value={t}>{t === 0 ? '🆓 Gratis' : `Rp ${Number(t).toLocaleString('id-ID')}`}</option>
+                  <option key={t} value={t}>{t === 0 ? 'Gratis' : `Rp ${Number(t).toLocaleString('id-ID')}`}</option>
                 ))}
               </select>
             </div>
@@ -126,8 +126,8 @@ export default function ParkirCard({ feature, selected, onClick, onEdit, onSave,
 
           {/* Buttons */}
           <div className="edit-buttons">
-            <button className="btn-save" onClick={handleSave}>💾 Simpan</button>
-            <button className="btn-cancel" onClick={onCancel}>✕ Batal</button>
+            <button className="btn-save" onClick={handleSave}>Simpan</button>
+            <button className="btn-cancel" onClick={onCancel}>Batal</button>
           </div>
         </div>
       </div>
@@ -137,8 +137,6 @@ export default function ParkirCard({ feature, selected, onClick, onEdit, onSave,
   // DISPLAY MODE VIEW
   const jenisLabel = p.jenis_kendaraan === 'mobil' ? 'Mobil'
     : p.jenis_kendaraan === 'motor' ? 'Motor' : 'Mobil & Motor'
-  const jenisIcon = p.jenis_kendaraan === 'mobil' ? '🚗'
-    : p.jenis_kendaraan === 'motor' ? '🏍️' : '🚗🏍️'
 
   return (
     <div className={`parking-card ${selected ? 'selected' : ''}`} onClick={onClick}>
@@ -150,16 +148,23 @@ export default function ParkirCard({ feature, selected, onClick, onEdit, onSave,
       </div>
       <div className="card-meta">
         <div className="meta-item">
-          <span>{jenisIcon}</span>
+          <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Jenis: </span>
           {jenisLabel}
         </div>
-        <div className="meta-item"><span>🕐</span>{p.jam_buka} - {p.jam_tutup}</div>
+        <div className="meta-item">
+          <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Jam: </span>
+          {p.jam_buka} - {p.jam_tutup}
+        </div>
         {p.kapasitas_total && (
-          <div className="meta-item"><span>🅿️</span>{p.kapasitas_tersedia}/{p.kapasitas_total} slot</div>
+          <div className="meta-item">
+            <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Slot: </span>
+            {p.kapasitas_tersedia}/{p.kapasitas_total} slot
+          </div>
         )}
         {p.distance !== undefined && (
           <div className="meta-item" style={{ color: 'var(--accent2)' }}>
-            <span>📏</span>{Math.round(p.distance)} m
+            <span style={{ fontWeight: 600 }}>Jarak: </span>
+            {Math.round(p.distance)} m
           </div>
         )}
       </div>
@@ -171,7 +176,7 @@ export default function ParkirCard({ feature, selected, onClick, onEdit, onSave,
         <button
           className="edit-btn"
           onClick={e => { e.stopPropagation(); onEdit() }}
-        >✏️ Edit</button>
+        >Edit</button>
       </div>
     </div>
   )

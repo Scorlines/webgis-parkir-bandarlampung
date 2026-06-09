@@ -3,6 +3,7 @@
 :root {
   --bg: #0d1117;
   --surface: #161b22;
+  --surface1: #161b22;
   --surface2: #1c2333;
   --surface3: #212830;
   --border: #30363d;
@@ -15,6 +16,35 @@
   --purple: #a371f7;
   --radius: 10px;
   --panel: 340px;
+  --shadow: rgba(0,0,0,0.5);
+  --glass-bg: rgba(22, 27, 34, 0.65);
+  --glass-bg-modal: rgba(22, 27, 34, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-input: rgba(255, 255, 255, 0.04);
+  --glass-card-hover: rgba(255, 255, 255, 0.06);
+}
+
+.light-theme {
+  --bg: #f6f8fa;
+  --surface: #ffffff;
+  --surface1: #ffffff;
+  --surface2: #f0f3f6;
+  --surface3: #e1e4e8;
+  --border: #d0d7de;
+  --text: #24292f;
+  --text-muted: #57606a;
+  --accent: #0969da;
+  --accent2: #0066cc;
+  --warn: #cf222e;
+  --yellow: #9a6700;
+  --purple: #8250df;
+  --shadow: rgba(0,0,0,0.15);
+  --header-bg: linear-gradient(135deg, #e1e4e8 0%, #f6f8fa 100%);
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-bg-modal: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-input: rgba(0, 0, 0, 0.03);
+  --glass-card-hover: rgba(0, 0, 0, 0.04);
 }
 
 html, body {
@@ -23,6 +53,7 @@ html, body {
   background: var(--bg);
   color: var(--text);
   overflow: hidden;
+  transition: background-color 0.25s, color 0.25s;
 }
 
 #root { height: 100vh; }
@@ -33,25 +64,29 @@ html, body {
 
 /* Leaflet popup override */
 .leaflet-popup-content-wrapper {
-  background: var(--surface2) !important;
-  border: 1px solid var(--border) !important;
+  background: var(--glass-bg-modal) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--glass-border) !important;
   border-radius: 10px !important;
   color: var(--text) !important;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
+  box-shadow: 0 8px 32px var(--shadow) !important;
 }
-.leaflet-popup-tip { background: var(--surface2) !important; }
+.leaflet-popup-tip { background: var(--glass-bg-modal) !important; border: 1px solid var(--glass-border) !important; }
 
 /* Modal overlay */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 9999;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.4);
   display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
 }
 .modal-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  background: var(--glass-bg-modal);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
   padding: 28px;
   width: 500px;
   max-width: 95vw;
@@ -59,6 +94,7 @@ html, body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 16px 48px 0 var(--shadow);
 }
 .modal-title {
   font-size: 18px;
@@ -78,17 +114,20 @@ html, body {
 }
 .form-input, .form-select {
   width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 7px;
+  background: var(--glass-input);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
   padding: 9px 12px;
   color: var(--text);
   font-family: inherit;
   font-size: 13px;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
 }
-.form-input:focus, .form-select:focus { border-color: var(--accent); }
+.form-input:focus, .form-select:focus { 
+  border-color: var(--accent); 
+  background: rgba(255, 255, 255, 0.08);
+}
 .form-row { display: flex; gap: 10px; }
 .form-row .form-group { flex: 1; }
 .btn-primary {

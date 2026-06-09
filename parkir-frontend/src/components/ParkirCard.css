@@ -1,28 +1,40 @@
 .parking-card {
-  background: var(--surface2);
-  border: 1px solid var(--border);
+  background: var(--glass-input);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   padding: 11px 12px;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   cursor: pointer;
-  transition: all 0.18s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 .parking-card::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: var(--accent); opacity: 0; transition: opacity 0.18s;
+  background: var(--accent); opacity: 0; transition: opacity 0.2s;
 }
-.parking-card:hover { border-color: #444c56; transform: translateX(2px); }
+.parking-card:hover { 
+  border-color: rgba(255, 255, 255, 0.15); 
+  background: var(--glass-card-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 .parking-card:hover::before { opacity: 1; }
-.parking-card.selected { border-color: var(--accent); background: rgba(0,229,160,0.05); }
+.parking-card.selected { 
+  border-color: var(--accent); 
+  background: rgba(0, 229, 160, 0.08); 
+  box-shadow: 0 4px 16px rgba(0, 229, 160, 0.05);
+}
 .parking-card.selected::before { opacity: 1; }
 
 .parking-card.editing {
-  background: rgba(0,229,160,0.1);
+  background: rgba(0, 229, 160, 0.05);
   border-color: var(--accent);
   cursor: default;
   padding: 12px;
+  backdrop-filter: blur(8px);
 }
 
 .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; margin-bottom: 6px; }
@@ -38,12 +50,12 @@
 .card-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
 .meta-item { display: flex; align-items: center; gap: 3px; font-size: 11px; color: var(--text-muted); }
 
-.card-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid var(--border); padding-top: 7px; }
+.card-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid var(--glass-border); padding-top: 7px; }
 .tarif-label { font-size: 10px; color: var(--text-muted); }
 .tarif-val { font-size: 13px; font-weight: 700; color: var(--yellow); font-family: 'Space Mono', monospace; }
 
 .edit-btn {
-  background: transparent; border: 1px solid var(--border); border-radius: 5px;
+  background: transparent; border: 1px solid var(--glass-border); border-radius: 5px;
   color: var(--text-muted); font-size: 11px; padding: 3px 8px; cursor: pointer;
   transition: all 0.15s; font-family: inherit;
 }
@@ -78,8 +90,8 @@
 
 .edit-input,
 .edit-select {
-  background: var(--surface1);
-  border: 1px solid var(--border);
+  background: var(--glass-input);
+  border: 1px solid var(--glass-border);
   border-radius: 4px;
   color: var(--text);
   font-size: 12px;
@@ -110,7 +122,7 @@
 .btn-cancel {
   flex: 1;
   padding: 6px 10px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--glass-border);
   border-radius: 4px;
   font-size: 11px;
   font-weight: 600;
