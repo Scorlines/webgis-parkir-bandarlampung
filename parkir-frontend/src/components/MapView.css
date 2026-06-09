@@ -40,3 +40,61 @@
 .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; font-size: 11px; color: var(--text-muted); }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .legend-rect { width: 12px; height: 8px; border-radius: 2px; flex-shrink: 0; opacity: 0.8; }
+
+/* ── Picking-Location Mode ─────────────────────────── */
+.map-container.picking-mode .map { cursor: crosshair !important; }
+.map-container.picking-mode .leaflet-container { cursor: crosshair !important; }
+
+/* Banner instruksi */
+.pick-location-banner {
+  position: absolute;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 600;
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid var(--accent);
+  border-radius: 24px;
+  padding: 10px 20px;
+  font-size: 13px; font-weight: 600;
+  color: var(--accent);
+  box-shadow: 0 4px 24px 0 rgba(0,209,178,0.18);
+  display: flex; align-items: center; gap: 8px;
+  pointer-events: none;
+  animation: banner-pop 0.3s cubic-bezier(.34,1.56,.64,1) both;
+  white-space: nowrap;
+}
+.pick-location-icon { font-size: 16px; animation: bounce-pin 1s infinite alternate ease-in-out; }
+
+@keyframes banner-pop {
+  from { opacity: 0; transform: translateX(-50%) scale(0.85); }
+  to   { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+@keyframes bounce-pin {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-4px); }
+}
+
+/* Dot animasi di titik yang diklik */
+.pick-dot-outer {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 209, 178, 0.2);
+  border: 2.5px solid var(--accent, #00d1b2);
+  display: flex; align-items: center; justify-content: center;
+  animation: pick-pulse 1.2s infinite ease-in-out;
+  box-shadow: 0 0 0 0 rgba(0, 209, 178, 0.5);
+}
+.pick-dot-inner {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--accent, #00d1b2);
+}
+
+@keyframes pick-pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(0, 209, 178, 0.55); }
+  70%  { box-shadow: 0 0 0 14px rgba(0, 209, 178, 0);  }
+  100% { box-shadow: 0 0 0 0   rgba(0, 209, 178, 0);  }
+}
+

@@ -21,6 +21,8 @@ export default function App() {
   const [isAdmin, setIsAdmin]       = useState(api.isAdmin())
   const [showLogin, setShowLogin]   = useState(false)
   const [theme, setTheme]           = useState('dark')
+  const [pickedLocation, setPickedLocation] = useState(null)   // {lat, lng} saat pilih titik di peta
+  const [isPickingMode, setIsPickingMode]   = useState(false)  // true saat user sedang pilih lokasi
   const mapRef = useRef(null)
 
   useEffect(() => {
@@ -67,6 +69,12 @@ export default function App() {
 
   // ── Nearby: pakai /api/parkir/terdekat dengan param lon & jenis ──
   const handleMapClick = useCallback(async (latlng) => {
+    // Jika sedang mode pilih lokasi → tangkap koordinat, lalu keluar dari mode picking
+    if (isPickingMode) {
+      setPickedLocation(latlng)
+      setIsPickingMode(false)
+      return
+    }
     if (!nearbyMode) return
     setNearbyCenter(latlng)
     try {
@@ -76,7 +84,7 @@ export default function App() {
     } catch {
       showToast('Gagal mengambil data terdekat')
     }
-  }, [nearbyMode, nearbyRadius, filters.jenis])
+  }, [isPickingMode, nearbyMode, nearbyRadius, filters.jenis])
 
   // Re-fetch saat radius berubah
   useEffect(() => {
@@ -194,6 +202,7 @@ export default function App() {
         loading={loading}
         theme={theme}
         toggleTheme={toggleTheme}
+        onDelete={handleDelete}
       />
       <MapView
         geojson={displayData}
@@ -205,6 +214,8 @@ export default function App() {
         onFeatureClick={handleSelect}
         mapRef={mapRef}
         theme={theme}
+        pickingLocation={isPickingMode}
+        pickedLocation={pickedLocation}
       />
       {modal.open && (
         <ParkirModal
@@ -212,7 +223,15 @@ export default function App() {
           data={modal.data}
           onSave={handleSave}
           onDelete={handleDelete}
-          onClose={() => setModal({ open: false, mode: 'create', data: null })}
+          onClose={() => {
+            setModal({ open: false, mode: 'create', data: null })
+            setPickedLocation(null)
+            setIsPickingMode(false)
+          }}
+          pickedLocation={pickedLocation}
+          isPickingMode={isPickingMode}
+          onStartPicking={() => setIsPickingMode(true)}
+          onCancelPicking={() => setIsPickingMode(false)}
         />
       )}
       {showLogin && (

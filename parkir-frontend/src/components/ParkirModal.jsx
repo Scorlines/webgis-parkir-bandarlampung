@@ -17,7 +17,7 @@ const defaultForm = {
   lat: -5.4061, lng: 105.2649
 }
 
-export default function ParkirModal({ mode, data, onSave, onDelete, onClose }) {
+export default function ParkirModal({ mode, data, onSave, onDelete, onClose, pickedLocation, isPickingMode, onStartPicking, onCancelPicking }) {
   const [form, setForm]         = useState(defaultForm)
   const [delConfirm, setDelConfirm] = useState(false)
   const [isEditMode, setIsEditMode] = useState(mode === 'create')
@@ -52,6 +52,17 @@ export default function ParkirModal({ mode, data, onSave, onDelete, onClose }) {
       setIsEditMode(true)
     }
   }, [mode, data])
+
+  // Sync koordinat dari klik peta (hanya mode create)
+  useEffect(() => {
+    if (mode === 'create' && pickedLocation) {
+      setForm(f => ({
+        ...f,
+        lat: Number(pickedLocation.lat.toFixed(6)),
+        lng: Number(pickedLocation.lng.toFixed(6))
+      }))
+    }
+  }, [pickedLocation, mode])
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
@@ -150,6 +161,17 @@ export default function ParkirModal({ mode, data, onSave, onDelete, onClose }) {
     )
   }
 
+  // ── MINIMIZED STATE: saat user sedang pilih lokasi di peta ──
+  if (isPickingMode) {
+    return (
+      <div className="modal-picking-bar">
+        <span className="pick-active-pulse" />
+        <span style={{ flex: 1 }}>Klik titik di peta untuk menentukan lokasi parkir...</span>
+        <button className="btn-pick-cancel" onClick={onCancelPicking}>Batal</button>
+      </div>
+    )
+  }
+
   // ── EDIT / CREATE MODE ────────────────────────────────────
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -233,6 +255,27 @@ export default function ParkirModal({ mode, data, onSave, onDelete, onClose }) {
               value={form.lng} onChange={e => set('lng', e.target.value)} />
           </div>
         </div>
+        {mode === 'create' && (
+          <div className="pick-location-row">
+            {!isPickingMode ? (
+              <button className="btn-pick-location" onClick={onStartPicking}>
+                <span className="pick-btn-icon">📍</span>
+                Pilih Lokasi di Peta
+              </button>
+            ) : (
+              <div className="pick-location-active">
+                <span className="pick-active-pulse" />
+                <span>Klik titik di peta...</span>
+                <button className="btn-pick-cancel" onClick={onCancelPicking}>Batal</button>
+              </div>
+            )}
+            {pickedLocation && !isPickingMode && (
+              <span className="pick-location-set">
+                Lokasi dipilih
+              </span>
+            )}
+          </div>
+        )}
 
         <div className="modal-actions">
           {mode === 'edit' && !delConfirm && (

@@ -3,6 +3,12 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './MapView.css'
 
+// Baca CSS variable sebagai hex — Leaflet canvas tidak bisa parse var(--x) langsung
+const getCSSVar = (name) => {
+  const val = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+  return val || (name === '--accent' ? '#00e5a0' : name === '--warn' ? '#f78166' : '#ffffff')
+}
+
 const makePopupHtml = (p, geomType) => {
   const isFull      = p.kapasitas_tersedia === 0
   const statusColor = isFull ? 'var(--warn)' : 'var(--accent)'
@@ -47,11 +53,12 @@ const makePopupHtml = (p, geomType) => {
   </div>`
 }
 
-export default function MapView({ geojson, selectedId, nearbyMode, nearbyCenter, nearbyRadius, onMapClick, onFeatureClick, mapRef, theme }) {
+export default function MapView({ geojson, selectedId, nearbyMode, nearbyCenter, nearbyRadius, onMapClick, onFeatureClick, mapRef, theme, pickingLocation, pickedLocation }) {
   const containerRef = useRef(null)
   const leafletMapRef = useRef(null)
   const geoLayerRef = useRef(null)
   const circleRef = useRef(null)
+  const pickMarkerRef = useRef(null)
   const layersRef = useRef({})
   const tileLayerRef = useRef(null)
   // Simpan onMapClick di ref agar event listener selalu pakai versi terbaru
@@ -113,6 +120,10 @@ export default function MapView({ geojson, selectedId, nearbyMode, nearbyCenter,
 
     if (!geojson?.features?.length) return
 
+    const ACCENT = getCSSVar('--accent')
+    const WARN   = getCSSVar('--warn')
+    const TEXT   = getCSSVar('--text')
+
     const layer = L.geoJSON(geojson, {
       style: (feature) => {
         const avail = feature.properties.kapasitas_tersedia > 0
@@ -121,8 +132,8 @@ export default function MapView({ geojson, selectedId, nearbyMode, nearbyCenter,
 
         if (isPoint) {
           return {
-            fillColor: avail ? 'var(--accent)' : 'var(--warn)',
-            color: isSelected ? 'var(--text)' : '#ffffff',
+            fillColor: avail ? ACCENT : WARN,
+            color: isSelected ? TEXT : '#ffffff',
             weight: isSelected ? 3 : 2,
             opacity: 1,
             fillOpacity: 0.9
@@ -131,10 +142,10 @@ export default function MapView({ geojson, selectedId, nearbyMode, nearbyCenter,
 
         // Polygon style
         return {
-          color: isSelected ? 'var(--text)' : (avail ? 'var(--accent)' : 'var(--warn)'),
+          color: isSelected ? TEXT : (avail ? ACCENT : WARN),
           weight: isSelected ? 3 : 2,
           opacity: 0.9,
-          fillColor: avail ? 'var(--accent)' : 'var(--warn)',
+          fillColor: avail ? ACCENT : WARN,
           fillOpacity: isSelected ? 0.6 : 0.35
         }
       },
@@ -143,8 +154,8 @@ export default function MapView({ geojson, selectedId, nearbyMode, nearbyCenter,
         const isFull = p.kapasitas_tersedia === 0
         return L.circleMarker(latlng, {
           radius     : 9,
-          fillColor  : isFull ? 'var(--warn)' : 'var(--accent)',
-          color      : '#fff',
+          fillColor  : isFull ? WARN : ACCENT,
+          color      : '#ffffff',
           weight     : 2,
           opacity    : 1,
           fillOpacity: 0.9
@@ -196,12 +207,35 @@ export default function MapView({ geojson, selectedId, nearbyMode, nearbyCenter,
     }
   }, [nearbyMode, nearbyCenter, nearbyRadius])
 
+  // Pick-location marker: tampilkan titik sementara saat user pilih koordinat
+  useEffect(() => {
+    const map = leafletMapRef.current
+    if (!map) return
+    // Hapus marker lama
+    if (pickMarkerRef.current) { map.removeLayer(pickMarkerRef.current); pickMarkerRef.current = null }
+    if (pickedLocation) {
+      const icon = L.divIcon({
+        className: '',
+        html: `<div class="pick-dot-outer"><div class="pick-dot-inner"></div></div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      })
+      pickMarkerRef.current = L.marker([pickedLocation.lat, pickedLocation.lng], { icon, zIndexOffset: 1000 }).addTo(map)
+    }
+  }, [pickedLocation])
+
   return (
-    <div className="map-container">
+    <div className={`map-container${pickingLocation ? ' picking-mode' : ''}`}>
       <div ref={containerRef} className="map" />
       <div className="map-badge map-title-badge">
         Bandar Lampung · <span>{geojson?.features?.length || 0} Lokasi Parkir</span>
       </div>
+      {pickingLocation && (
+        <div className="pick-location-banner">
+          <span className="pick-location-icon">📍</span>
+          Klik di peta untuk menentukan lokasi parkir
+        </div>
+      )}
       {nearbyMode && nearbyCenter && (
         <div className="map-badge nearby-badge">
           Pencarian terdekat: {geojson?.features?.length} parkir dalam radius {nearbyRadius}m

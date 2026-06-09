@@ -10,7 +10,7 @@ export default function Sidebar({
   nearbyMode, setNearbyMode, nearbyRadius, setNearbyRadius,
   nearbyCenter, setNearbyCenter, setNearbyData,
   selectedId, onSelect, onAdd, onInlineEdit, onInlineCancel, loading,
-  isAdmin, onAdminClick, theme, toggleTheme
+  isAdmin, onAdminClick, theme, toggleTheme, onDelete
 }) {
   const [editingId, setEditingId] = useState(null)
 
@@ -206,6 +206,7 @@ export default function Sidebar({
               onEdit={() => handleInlineEdit(f)}
               onSave={handleInlineSave}
               onCancel={handleInlineCancel}
+              onDelete={isAdmin ? (id) => onDelete(id) : undefined}
             />
           ))
         )}

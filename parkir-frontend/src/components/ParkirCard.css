@@ -61,6 +61,56 @@
 }
 .edit-btn:hover { border-color: var(--accent2); color: var(--accent2); }
 
+.delete-btn {
+  background: transparent;
+  border: 1px solid rgba(247,129,102,0.3);
+  border-radius: 5px;
+  color: var(--warn);
+  font-size: 11px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.delete-btn:hover { background: rgba(247,129,102,0.15); border-color: var(--warn); }
+
+/* Delete confirmation inline */
+.del-confirm-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  animation: fade-in-pick 0.18s ease;
+}
+.del-confirm-text {
+  font-size: 10px;
+  color: var(--warn);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.del-yes-btn, .del-no-btn {
+  font-size: 10px;
+  padding: 3px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid;
+  font-family: inherit;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.del-yes-btn {
+  background: rgba(247,129,102,0.15);
+  border-color: var(--warn);
+  color: var(--warn);
+}
+.del-yes-btn:hover { background: var(--warn); color: var(--surface1); }
+.del-no-btn {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+.del-no-btn:hover { border-color: var(--text-muted); color: var(--text); }
+
+
 /* === INLINE EDIT FORM === */
 .edit-form {
   display: flex;

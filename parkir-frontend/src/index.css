@@ -96,6 +96,33 @@ html, body {
   flex-direction: column;
   box-shadow: 0 16px 48px 0 var(--shadow);
 }
+
+/* ── Minimized bar saat mode picking ──────────────── */
+.modal-picking-bar {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  background: var(--glass-bg-modal);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid var(--accent);
+  border-radius: 32px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  box-shadow: 0 8px 32px rgba(0,209,178,0.25);
+  white-space: nowrap;
+  animation: banner-pop 0.3s cubic-bezier(.34,1.56,.64,1) both;
+  min-width: 340px;
+  max-width: 90vw;
+}
+
 .modal-title {
   font-size: 18px;
   font-weight: 700;
@@ -286,3 +313,101 @@ select option {
   color: var(--warn);
   border: 1px solid rgba(247, 129, 102, 0.3);
 }
+
+/* ── Pick Location Button (dalam form tambah) ──────── */
+.pick-location-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-pick-location {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  background: rgba(0, 209, 178, 0.1);
+  border: 1.5px dashed var(--accent);
+  border-radius: 8px;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+  justify-content: center;
+}
+.btn-pick-location:hover {
+  background: rgba(0, 209, 178, 0.18);
+  border-style: solid;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 209, 178, 0.2);
+}
+.pick-btn-icon { font-size: 15px; }
+
+/* Status saat picking aktif */
+.pick-location-active {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  background: rgba(0, 209, 178, 0.08);
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+  flex: 1;
+  animation: fade-in-pick 0.25s ease;
+}
+@keyframes fade-in-pick {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Dot berkedip saat picking */
+.pick-active-pulse {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: pulse-dot 1s infinite ease-in-out;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.btn-pick-cancel {
+  margin-left: auto;
+  padding: 4px 10px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-pick-cancel:hover { border-color: var(--warn); color: var(--warn); }
+
+/* Badge "Lokasi dipilih" */
+.pick-location-set {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: rgba(0, 229, 160, 0.12);
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.pick-location-set::before { content: '✓'; font-weight: 800; }
+

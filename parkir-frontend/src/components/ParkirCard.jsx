@@ -10,9 +10,10 @@ const JENIS_OPTIONS = [
 ]
 const TARIF_OPTIONS = [0, 2000, 3000, 5000]
 
-export default function ParkirCard({ feature, selected, onClick, onEdit, onSave, onCancel, isEditing }) {
+export default function ParkirCard({ feature, selected, onClick, onEdit, onSave, onCancel, isEditing, onDelete }) {
   const p = feature.properties
   const isAvail = p.kapasitas_tersedia > 0
+  const [delConfirm, setDelConfirm] = useState(false)
 
   // Inisialisasi form dengan nama field yang sesuai backend
   const [form, setForm] = useState({
@@ -173,10 +174,28 @@ export default function ParkirCard({ feature, selected, onClick, onEdit, onSave,
           <div className="tarif-label">Tarif/jam</div>
           <div className="tarif-val">{formatTarif(p.tarif_per_jam)}</div>
         </div>
-        <button
-          className="edit-btn"
-          onClick={e => { e.stopPropagation(); onEdit() }}
-        >Edit</button>
+        <div style={{ display: 'flex', gap: 6 }}>
+          {!delConfirm ? (
+            <>
+              <button
+                className="edit-btn"
+                onClick={e => { e.stopPropagation(); onEdit() }}
+              >Edit</button>
+              {onDelete && (
+                <button
+                  className="delete-btn"
+                  onClick={e => { e.stopPropagation(); setDelConfirm(true) }}
+                >Hapus</button>
+              )}
+            </>
+          ) : (
+            <div className="del-confirm-row" onClick={e => e.stopPropagation()}>
+              <span className="del-confirm-text">Yakin hapus?</span>
+              <button className="del-yes-btn" onClick={e => { e.stopPropagation(); onDelete(feature.properties.id) }}>Ya</button>
+              <button className="del-no-btn" onClick={e => { e.stopPropagation(); setDelConfirm(false) }}>Batal</button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
